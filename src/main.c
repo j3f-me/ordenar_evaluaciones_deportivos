@@ -25,6 +25,12 @@ int main(int argc, char **argv) {
     atleta* atletas[n_entries];
     extract_data(atletas, path);
 
+    printf("unsorted ids:\n");
+    for (int i = 0; i < n_entries; i++) {
+        atleta* temp = atletas[i];
+        printf("id: %d event: %s score: %s\n", temp->id, temp->event, temp->score);
+    }
+
 
 
     return 0;

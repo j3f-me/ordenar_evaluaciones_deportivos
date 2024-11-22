@@ -4,7 +4,7 @@
 
 #include "lector.h"
 
-void check_and_open(char* path, FILE** txt) {
+void check_and_open(char *path, FILE **txt) {
     if (!ends_with(path, ".txt")) {
         fprintf(stderr, "file is not a valid text file");
         exit(EXIT_FAILURE);
@@ -18,13 +18,11 @@ void check_and_open(char* path, FILE** txt) {
         fprintf(stderr, "file was not found");
         exit(EXIT_FAILURE);
     }
-
 }
 
 
-int get_entry_num(char* path) {
-
-    FILE* txt;
+int get_entry_num(char *path) {
+    FILE *txt;
     check_and_open(path, &txt);
 
     // buffer para almacenar cada palabra
@@ -39,25 +37,22 @@ int get_entry_num(char* path) {
 }
 
 
-
-
-
-void extract_data(atleta** array, char* path) {
-
-    FILE* txt = NULL;
+void extract_data(atleta **array, char *path) {
+    FILE *txt = NULL;
     check_and_open(path, &txt);
 
     char line[BUFFER_SIZE];
 
+    int index_arr = 0;
     while (fgets(line, sizeof(line), txt)) {
         // limpiar \n (remover saltos de line) y tambien \r carriage retorneos
         // fuente: https://www.geeksforgeeks.org/removing-trailing-newline-character-from-fgets-input/
         line[strcspn(line, "\r\n")] = '\0';
 
         // extraer extructura de datos
-        char* line_copy = copy_str(line);
+        char *line_copy = copy_str(line);
         // split line: https://www.geeksforgeeks.org/how-to-split-a-string-by-a-delimiter-in-c/
-        char* arg = strtok(line, " ");
+        char *arg = strtok(line, " ");
         int arg_count = 0;
         // determine number of args
         if (arg == NULL) {
@@ -76,7 +71,7 @@ void extract_data(atleta** array, char* path) {
         }
 
         // now get the arguments
-        char* args[ARGS+1];
+        char *args[ARGS + 1];
         args[ARGS] = NULL;
         int index = 0;
         arg = "";
@@ -98,6 +93,26 @@ void extract_data(atleta** array, char* path) {
         }
         printf("---------------\n");
         // create athlete
+        int ordered_args[ARGS]; // 0: athlete id, 1: event id, 2: score, -1: invalid
+        for (size_t i = 0; i < ARGS; i++) {
+            ordered_args[i] = -1;
+        }
+        for (int i = 0; i < ARGS; i++) {
+            char* temp = args[i];
+            if (is_athlete_id(temp)) {
+                ordered_args[0] = i;
+            } else if (is_event_id(temp)) {
+                ordered_args[1] = i;
+            } else if (is_score(temp)) {
+                ordered_args[2] = i;
+            }
+        }
+
+        // create athlete
+        atleta* new = create_atleta(atoi(args[ordered_args[0]]), args[ordered_args[1]], args[ordered_args[2]]);
+
+        array[index_arr] = new;
+        index_arr++;
     }
 
     fclose(txt);
