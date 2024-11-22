@@ -4,7 +4,7 @@ LDFLAGS = -lm
 BUILD_DIR = build
 ARGS = 'datos_desordenados.txt'
 
-SRCS = src/main.c
+SRCS = src/lector.c src/main.c src/utils.c  src/atleta.c
 OBJS = $(patsubst src/%.c, $(BUILD_DIR)/%.o, $(SRCS))
 
 TARGET = $(BUILD_DIR)/ordenar_eval
