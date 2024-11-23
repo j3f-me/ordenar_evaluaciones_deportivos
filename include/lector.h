@@ -18,6 +18,7 @@
 
 #define BUFFER_SIZE 200
 #define ARGS 3
+#define DEBUG_MODE 0
 
 // functions called from main
 int get_entry_num(char* path);

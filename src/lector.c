@@ -29,6 +29,10 @@ int get_entry_num(char *path) {
     char linea[BUFFER_SIZE];
     int num_entries = 0;
     while (fgets(linea, sizeof(linea), txt)) {
+        if (strlen(linea) < 2) {
+            printf("Linea %d esta vacia %s\n", num_entries+1, linea);
+            continue;
+        }
         num_entries++;
     }
     fclose(txt);
@@ -42,9 +46,11 @@ void extract_data(atleta **array, char *path) {
     check_and_open(path, &txt);
 
     char line[BUFFER_SIZE];
+    int line_index = 0;
 
     int index_arr = 0;
     while (fgets(line, sizeof(line), txt)) {
+        line_index++;
         // limpiar \n (remover saltos de line) y tambien \r carriage retorneos
         // fuente: https://www.geeksforgeeks.org/removing-trailing-newline-character-from-fgets-input/
         line[strcspn(line, "\r\n")] = '\0';
@@ -84,21 +90,24 @@ void extract_data(atleta **array, char *path) {
         }
 
         // validation and determination which arg is which attribute
-        printf("new line     ID | EV | SC\n");
-        for (int i = 0; i < ARGS; i++) {
-            int isAthlete = is_athlete_id(args[i]);
-            int isEvent = is_event_id(args[i]);
-            int isScore = is_score(args[i]);
-            printf("%s   %d | %d | %d \n", args[i], isAthlete, isEvent, isScore);
+        if (DEBUG_MODE) {
+            printf("new line     ID | EV | SC\n");
+            for (int i = 0; i < ARGS; i++) {
+                int isAthlete = is_athlete_id(args[i]);
+                int isEvent = is_event_id(args[i]);
+                int isScore = is_score(args[i]);
+                printf("%s   %d | %d | %d \n", args[i], isAthlete, isEvent, isScore);
+            }
+            printf("---------------\n");
         }
-        printf("---------------\n");
+
         // create athlete
         int ordered_args[ARGS]; // 0: athlete id, 1: event id, 2: score, -1: invalid
         for (size_t i = 0; i < ARGS; i++) {
             ordered_args[i] = -1;
         }
         for (int i = 0; i < ARGS; i++) {
-            char* temp = args[i];
+            char *temp = args[i];
             if (is_athlete_id(temp)) {
                 ordered_args[0] = i;
             } else if (is_event_id(temp)) {
@@ -107,9 +116,17 @@ void extract_data(atleta **array, char *path) {
                 ordered_args[2] = i;
             }
         }
+        for (size_t i = 0; i < ARGS; i++) {
+            if (ordered_args[i] == -1) {
+                // after mapping which arg holds which information there are no invalid indexes left
+                // if yes, then the input line is not valid
+                printf("skip ln %d: input line is corrupted", line_index);
+                continue;
+            }
+        }
 
         // create athlete
-        atleta* new = create_atleta(atoi(args[ordered_args[0]]), args[ordered_args[1]], args[ordered_args[2]]);
+        atleta *new = create_atleta(atoi(args[ordered_args[0]]), args[ordered_args[1]], args[ordered_args[2]]);
 
         array[index_arr] = new;
         index_arr++;
