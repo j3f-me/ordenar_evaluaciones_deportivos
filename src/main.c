@@ -4,9 +4,11 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #include "atleta.h"
 #include "lector.h"
+#include "ordenamiento.h"
 #include "utils.h"
 
 int main(int argc, char **argv) {
@@ -18,7 +20,7 @@ int main(int argc, char **argv) {
         return -1;
     }
     char* path = argv[1];
-    // extraer arreglo con los datos -> lector
+    // 1) extraer arreglo con los datos -> lector
     int n_entries = get_entry_num(path);
     printf("init array with athlete size %d\n", n_entries);
     // create array structure
@@ -33,6 +35,84 @@ int main(int argc, char **argv) {
         }
     }
 
+    // copy data to have multiple trails for different complexities
+    atleta* unsorted1[n_entries];
+    atleta* unsorted2[n_entries];
+    atleta* unsorted3[n_entries];
+
+    for (int i = 0; i < n_entries; i++) {
+        // Allocate memory for each atleta in unsorted1, unsorted2, and unsorted3
+        unsorted1[i] = malloc(sizeof(atleta));
+        unsorted2[i] = malloc(sizeof(atleta));
+        unsorted3[i] = malloc(sizeof(atleta));
+
+        // Deep copy for unsorted1
+        unsorted1[i]->id = atletas[i]->id;
+        strcpy(unsorted1[i]->event, copy_str(atletas[i]->event));
+        strcpy(unsorted1[i]->score, copy_str(atletas[i]->score));
+
+        // Deep copy for unsorted2
+        unsorted2[i]->id = atletas[i]->id;
+        strcpy(unsorted2[i]->event, copy_str(atletas[i]->event));
+        strcpy(unsorted2[i]->score, copy_str(atletas[i]->score));
+
+        // Deep copy for unsorted3
+        unsorted3[i]->id = atletas[i]->id;
+        strcpy(unsorted3[i]->event, copy_str(atletas[i]->event));
+        strcpy(unsorted3[i]->score, copy_str(atletas[i]->score));
+    }
+
+
+    // 2) ordering with one of the three different complexity algorithms
+    double times[3]; // 0: bubble, 1: quick, 2: radix (stored in us)
+
+    struct timespec start, end;
+    clock_gettime(CLOCK_REALTIME, &start);
+    int comp = bubble_sort(atletas, n_entries);
+    clock_gettime(CLOCK_REALTIME, &end);
+    // calculate elapsed time in microseconds
+    long seconds = end.tv_sec - start.tv_sec;
+    long nanoseconds = end.tv_nsec - start.tv_nsec;
+    double delta_ms = (double)seconds * 1e6 + (double)nanoseconds / 1e3;
+    times[0] = delta_ms;
+    if (verbose) {
+        printf("Bubble Sort: %d comparisons %.3lf us\n", comp, delta_ms);
+    }
+    // 3) extraction of the ordered array into THE file: evaluaciones_ordenadas.txt
+    const char* out_path = "evaluaciones_ordenadas.txt";
+    FILE *out = fopen(out_path, "w");
+    for (int i = 0; i < n_entries; i++) {
+        atleta* temp = atletas[i];
+        fprintf(out, "%d %s %s\n", temp->id, temp->event, temp->score);
+    }
+    fclose(out);
+
+    // 4) report of complexity (time measurement, count of comparisons, number of used memory, ...)
+    clock_gettime(CLOCK_REALTIME, &start);
+    quick_sort(unsorted1, 0, n_entries - 1);
+    clock_gettime(CLOCK_REALTIME, &end);
+    seconds = end.tv_sec - start.tv_sec;
+    nanoseconds = end.tv_nsec - start.tv_nsec;
+    delta_ms = (double)seconds * 1e6 + (double)nanoseconds / 1e3;
+    times[1] = delta_ms;
+    printf("Quick Sort: %.3lf us\n", delta_ms);
+
+    clock_gettime(CLOCK_REALTIME, &start);
+    radix_sort(unsorted2, n_entries);
+    clock_gettime(CLOCK_REALTIME, &end);
+    seconds = end.tv_sec - start.tv_sec;
+    nanoseconds = end.tv_nsec - start.tv_nsec;
+    delta_ms = (double)seconds * 1e6 + (double)nanoseconds / 1e3;
+    times[2] = delta_ms;
+    printf("Radix Sort: %.3lf us\n", delta_ms);
+
+    // free allocated memory
+    for (int i = 0; i < n_entries; i++) {
+        if (atletas[i]) free(atletas[i]);
+        if (unsorted1[i]) free(unsorted1[i]);
+        if (unsorted2[i]) free(unsorted2[i]);
+        if (unsorted3[i]) free(unsorted3[i]);
+    }
 
 
     return 0;

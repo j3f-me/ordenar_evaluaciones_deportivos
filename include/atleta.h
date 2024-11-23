@@ -2,12 +2,12 @@
 // Created by jan on 22.11.24.
 //
 
+#ifndef ATLETA_H
+#define ATLETA_H
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
-#ifndef ATLETA_H
-#define ATLETA_H
 
 #define ID_DIGITS 8
 #define EVENT_DIGITS 6

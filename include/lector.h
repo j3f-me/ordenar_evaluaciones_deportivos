@@ -6,15 +6,16 @@
 #define _POSIX_C_SOURCE 200112L
 #endif
 
+
+#ifndef LECTOR_H
+#define LECTOR_H
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
 #include "utils.h"
 #include "atleta.h"
-
-#ifndef LECTOR_H
-#define LECTOR_H
 
 #define BUFFER_SIZE 200
 #define ARGS 3

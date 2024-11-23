@@ -1,10 +1,10 @@
 CC = gcc
 CFLAGS = -std=c99 -Wall -Wextra -Iinclude
-LDFLAGS = -lm
+LDFLAGS = -lrt -lm
 BUILD_DIR = build
-ARGS = 'datos_desordenados.txt'
+ARGS = 'datos_desordenados.txt' -v
 
-SRCS = src/lector.c src/main.c src/utils.c  src/atleta.c
+SRCS = src/main.c src/lector.c src/utils.c  src/atleta.c src/ordenamiento.c
 OBJS = $(patsubst src/%.c, $(BUILD_DIR)/%.o, $(SRCS))
 
 TARGET = $(BUILD_DIR)/ordenar_eval
@@ -25,6 +25,7 @@ $(BUILD_DIR)/%.o: src/%.c | $(BUILD_DIR)
 
 clean:
 	rm -f $(OBJS) $(TARGET)
+	rm -f "evaluaciones_ordenadas.txt"
 
 
 run: $(TARGET)
