@@ -30,7 +30,7 @@ int get_entry_num(char *path) {
     int num_entries = 0;
     while (fgets(linea, sizeof(linea), txt)) {
         if (strlen(linea) < 2) {
-            printf("Linea %d esta vacia %s\n", num_entries+1, linea);
+            printf("Linea %d esta vacia\n", num_entries+1);
             continue;
         }
         num_entries++;
@@ -63,7 +63,7 @@ void extract_data(atleta **array, char *path) {
         // determine number of args
         if (arg == NULL) {
             // skip line as it does not have at least one argument
-            printf("skipped: %s\n", line);
+            printf("line %d skipped: %s\n", line_index, line);
             free(line_copy);
             continue;
         }
@@ -73,7 +73,7 @@ void extract_data(atleta **array, char *path) {
         }
 
         if (arg_count != ARGS) {
-            printf("skipped: %s\n", line);
+            printf("line %d skipped: %s\n", line_index, line);
             free(line_copy);
             continue;
         }

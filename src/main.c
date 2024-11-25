@@ -90,6 +90,7 @@ int main(int argc, char **argv) {
         fprintf(out, "%d %s %s\n", temp->id, temp->event, temp->score);
     }
     fclose(out);
+    printf("### %s generated \n", out_path);
 
     // 4) report of complexity (time measurement, count of comparisons, number of used memory, ...)
     clock_gettime(CLOCK_REALTIME, &start);
@@ -105,15 +106,15 @@ int main(int argc, char **argv) {
     }
 
     clock_gettime(CLOCK_REALTIME, &start);
-    printf("before radix sort is fine\n");
     int comp_radix = radix_sort(unsorted2, n_entries);
-    printf("I arrive after radix sort\n");
     clock_gettime(CLOCK_REALTIME, &end);
     seconds = end.tv_sec - start.tv_sec;
     nanoseconds = end.tv_nsec - start.tv_nsec;
     delta_ms = (double) seconds * 1e6 + (double) nanoseconds / 1e3;
     times[2] = delta_ms;
-    printf("Radix Sort: %.3lf us\n", delta_ms);
+    if (verbose) {
+        printf("Radix Sort: %.3lf us\n", delta_ms);
+    }
 
     // write file
     const char *log_path = "reporte.txt";
@@ -122,6 +123,8 @@ int main(int argc, char **argv) {
     fprintf(log_file, "Bubble Sort  |   %.3lf     |      %d     |\n", times[0], comp_bubble);
     fprintf(log_file, "Quick Sort   |   %.3lf     |      %d     |\n", times[1], comp_quick);
     fprintf(log_file, "Radix Sort   |   %.3lf     |      %d     |\n", times[2], comp_radix);
+    fclose(log_file);
+    printf("### %s generated \n", log_path);
 
     // debug sorting algorithms
     if (verbose) {

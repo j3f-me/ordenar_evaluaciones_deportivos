@@ -3,7 +3,7 @@ CFLAGS = -std=c99 -Wall -Wextra -Iinclude
 LDFLAGS = -lrt -lm
 BUILD_DIR = build
 DEBUG_DIR = logs
-ARGS = 'datos_desordenados.txt' -v
+ARGS = 'datos_desordenados.txt'
 
 SRCS = src/main.c src/lector.c src/utils.c  src/atleta.c src/ordenamiento.c
 OBJS = $(patsubst src/%.c, $(BUILD_DIR)/%.o, $(SRCS))
