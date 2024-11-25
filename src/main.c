@@ -101,6 +101,7 @@ int main(int argc, char **argv) {
     clock_gettime(CLOCK_REALTIME, &start);
     printf("before radix sort is fine\n");
     int comp_radix = radix_sort(unsorted2, n_entries);
+    printf("I arrive after radix sort\n");
     clock_gettime(CLOCK_REALTIME, &end);
     seconds = end.tv_sec - start.tv_sec;
     nanoseconds = end.tv_nsec - start.tv_nsec;
