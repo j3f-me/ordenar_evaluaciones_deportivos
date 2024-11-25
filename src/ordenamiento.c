@@ -88,7 +88,7 @@ int getMax(atleta **arr, int n) {
 int countSort(atleta **arr, int n, int exp) {
     int comparisons = 0;
     // output array
-    int output[n];
+    atleta* output[n];
     int i, count[10] = {0};
 
     // Store count of occurrences in count[]
@@ -107,7 +107,7 @@ int countSort(atleta **arr, int n, int exp) {
     // Build the output array
     for (i = n - 1; i >= 0; i--) {
         comparisons++;
-        output[count[(arr[i]->id / exp) % 10] - 1] = arr[i]->id;
+        output[count[(arr[i]->id / exp) % 10] - 1] = arr[i];
         count[(arr[i]->id / exp) % 10]--;
     }
 
@@ -115,7 +115,7 @@ int countSort(atleta **arr, int n, int exp) {
     // contains sorted numbers according to current digit
     for (i = 0; i < n; i++) {
         comparisons++;
-        arr[i]->id = output[i];
+        arr[i] = output[i];
     }
 
     return comparisons;
@@ -131,8 +131,11 @@ int radix_sort(atleta **arr, int n) {
     // Do counting sort for every digit. Note that instead
     // of passing digit number, exp is passed. exp is 10^i
     // where i is current digit number
-    for (int exp = 1; m / exp <= 0; exp *= 10) {
+    for (int exp = 1; ; exp *= 10) {
         comparisons++;
+        if (m / exp <= 0)
+            break;
+
         comparisons += countSort(arr, n, exp); // Add comparisons from countSort
     }
 
