@@ -113,9 +113,10 @@ int countSort(atleta **arr, int n, int exp) {
 
     // Copy the output array to arr[], so that arr[] now
     // contains sorted numbers according to current digit
-    for (i = 0; i < n; i++)
+    for (i = 0; i < n; i++) {
         comparisons++;
-    arr[i]->id = output[i];
+        arr[i]->id = output[i];
+    }
 
     return comparisons;
 }
@@ -130,11 +131,8 @@ int radix_sort(atleta **arr, int n) {
     // Do counting sort for every digit. Note that instead
     // of passing digit number, exp is passed. exp is 10^i
     // where i is current digit number
-    for (int exp = 1; ; exp *= 10) {
+    for (int exp = 1; m / exp <= 0; exp *= 10) {
         comparisons++;
-        if (m / exp <= 0)
-            break;
-
         comparisons += countSort(arr, n, exp); // Add comparisons from countSort
     }
 
