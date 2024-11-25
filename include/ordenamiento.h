@@ -14,10 +14,12 @@
 #ifndef ORDENAMIENTO_H
 #define ORDENAMIENTO_H
 
-int bubble_sort(atleta** arreglo, int n);
+int bubble_sort(atleta **arreglo, int n);
 
-void quick_sort(atleta** arr, int low, int high);
+void quick_sort(atleta **arr, int low, int high, int *comp);
 
-void radix_sort(atleta **arr, int n);
+int radix_sort(atleta **arr, int n);
+
+extern int comparisons_quick;
 
 #endif //ORDENAMIENTO_H

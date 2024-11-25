@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
 
     struct timespec start, end;
     clock_gettime(CLOCK_REALTIME, &start);
-    int comp = bubble_sort(atletas, n_entries);
+    int comp_bubble = bubble_sort(atletas, n_entries);
     clock_gettime(CLOCK_REALTIME, &end);
     // calculate elapsed time in microseconds
     long seconds = end.tv_sec - start.tv_sec;
@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
     double delta_ms = (double)seconds * 1e6 + (double)nanoseconds / 1e3;
     times[0] = delta_ms;
     if (verbose) {
-        printf("Bubble Sort: %d comparisons %.3lf us\n", comp, delta_ms);
+        printf("Bubble Sort: %d comparisons %.3lf us\n", comp_bubble, delta_ms);
     }
     // 3) extraction of the ordered array into THE file: evaluaciones_ordenadas.txt
     const char* out_path = "evaluaciones_ordenadas.txt";
@@ -89,7 +89,8 @@ int main(int argc, char **argv) {
 
     // 4) report of complexity (time measurement, count of comparisons, number of used memory, ...)
     clock_gettime(CLOCK_REALTIME, &start);
-    quick_sort(unsorted1, 0, n_entries - 1);
+    int comp_quick = 0;
+    quick_sort(unsorted1, 0, n_entries - 1, &comp_quick);
     clock_gettime(CLOCK_REALTIME, &end);
     seconds = end.tv_sec - start.tv_sec;
     nanoseconds = end.tv_nsec - start.tv_nsec;
@@ -98,13 +99,21 @@ int main(int argc, char **argv) {
     printf("Quick Sort: %.3lf us\n", delta_ms);
 
     clock_gettime(CLOCK_REALTIME, &start);
-    radix_sort(unsorted2, n_entries);
+    int comp_radix = radix_sort(unsorted2, n_entries);
     clock_gettime(CLOCK_REALTIME, &end);
     seconds = end.tv_sec - start.tv_sec;
     nanoseconds = end.tv_nsec - start.tv_nsec;
     delta_ms = (double)seconds * 1e6 + (double)nanoseconds / 1e3;
     times[2] = delta_ms;
     printf("Radix Sort: %.3lf us\n", delta_ms);
+
+    // write file
+    const char* log_path = "reporte.txt";
+    FILE *log_file = fopen(log_path, "w");
+    fprintf(log_file, "             |   TIME [us]  |  COMPARISONS  | \n");
+    fprintf(log_file, "Bubble Sort  |   %.3lf     |      %d     |\n", times[0], comp_bubble);
+    fprintf(log_file, "Quick Sort   |   %.3lf     |      %d     |\n", times[1], comp_quick);
+    fprintf(log_file, "Radix Sort   |   %.3lf     |      %d     |\n", times[2], comp_radix);
 
     // free allocated memory
     for (int i = 0; i < n_entries; i++) {
@@ -113,7 +122,6 @@ int main(int argc, char **argv) {
         if (unsorted2[i]) free(unsorted2[i]);
         if (unsorted3[i]) free(unsorted3[i]);
     }
-
 
     return 0;
 }
