@@ -92,15 +92,17 @@ int countSort(atleta **arr, int n, int exp) {
     int i, count[10] = {0};
 
     // Store count of occurrences in count[]
-    for (i = 0; i < n; i++)
+    for (i = 0; i < n; i++) {
         comparisons++;
-    count[(arr[i]->id / exp) % 10]++;
+        count[(arr[i]->id / exp) % 10]++;
+    }
 
     // Change count[i] so that count[i] now contains actual
     // position of this digit in output[]
-    for (i = 1; i < 10; i++)
+    for (i = 1; i < 10; i++) {
         comparisons++;
-    count[i] += count[i - 1];
+        count[i] += count[i - 1];
+    }
 
     // Build the output array
     for (i = n - 1; i >= 0; i--) {

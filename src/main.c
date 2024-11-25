@@ -48,18 +48,18 @@ int main(int argc, char **argv) {
 
         // Deep copy for unsorted1
         unsorted1[i]->id = atletas[i]->id;
-        strcpy(unsorted1[i]->event, copy_str(atletas[i]->event));
-        strcpy(unsorted1[i]->score, copy_str(atletas[i]->score));
+        strcpy(unsorted1[i]->event, atletas[i]->event);
+        strcpy(unsorted1[i]->score, atletas[i]->score);
 
         // Deep copy for unsorted2
         unsorted2[i]->id = atletas[i]->id;
-        strcpy(unsorted2[i]->event, copy_str(atletas[i]->event));
-        strcpy(unsorted2[i]->score, copy_str(atletas[i]->score));
+        strcpy(unsorted2[i]->event, atletas[i]->event);
+        strcpy(unsorted2[i]->score, atletas[i]->score);
 
         // Deep copy for unsorted3
         unsorted3[i]->id = atletas[i]->id;
-        strcpy(unsorted3[i]->event, copy_str(atletas[i]->event));
-        strcpy(unsorted3[i]->score, copy_str(atletas[i]->score));
+        strcpy(unsorted3[i]->event, atletas[i]->event);
+        strcpy(unsorted3[i]->score, atletas[i]->score);
     }
 
 

@@ -20,6 +20,6 @@ void quick_sort(atleta **arr, int low, int high, int *comp);
 
 int radix_sort(atleta **arr, int n);
 
-extern int comparisons_quick;
+
 
 #endif //ORDENAMIENTO_H

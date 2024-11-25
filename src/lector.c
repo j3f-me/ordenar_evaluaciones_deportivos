@@ -64,6 +64,7 @@ void extract_data(atleta **array, char *path) {
         if (arg == NULL) {
             // skip line as it does not have at least one argument
             printf("skipped: %s\n", line);
+            free(line_copy);
             continue;
         }
         while (arg != NULL) {
@@ -73,6 +74,7 @@ void extract_data(atleta **array, char *path) {
 
         if (arg_count != ARGS) {
             printf("skipped: %s\n", line);
+            free(line_copy);
             continue;
         }
 
@@ -121,6 +123,7 @@ void extract_data(atleta **array, char *path) {
                 // after mapping which arg holds which information there are no invalid indexes left
                 // if yes, then the input line is not valid
                 printf("skip ln %d: input line is corrupted", line_index);
+                free(line_copy);
                 continue;
             }
         }
@@ -130,6 +133,7 @@ void extract_data(atleta **array, char *path) {
 
         array[index_arr] = new;
         index_arr++;
+        free(line_copy);
     }
 
     fclose(txt);
