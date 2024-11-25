@@ -99,6 +99,7 @@ int main(int argc, char **argv) {
     printf("Quick Sort: %.3lf us\n", delta_ms);
 
     clock_gettime(CLOCK_REALTIME, &start);
+    printf("before radix sort is fine\n");
     int comp_radix = radix_sort(unsorted2, n_entries);
     clock_gettime(CLOCK_REALTIME, &end);
     seconds = end.tv_sec - start.tv_sec;

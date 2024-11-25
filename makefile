@@ -26,6 +26,7 @@ $(BUILD_DIR)/%.o: src/%.c | $(BUILD_DIR)
 clean:
 	rm -f $(OBJS) $(TARGET)
 	rm -f "evaluaciones_ordenadas.txt"
+	rm -f "reporte.txt"
 
 
 run: $(TARGET)
