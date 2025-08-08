@@ -39,4 +39,3 @@ Se puede activar salida de texto verbosa con el indicador '-v'
 
 (4) Creador del programa
 Jan Fenker, RUT-USM: 90.004.813-0
-correo: jfenker@usm.cl | jan@fenker.eu
